@@ -1,0 +1,23 @@
+<Application x:Class="CSVRescue.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:CSVRescue.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/DesignTokens.xaml"/>
+                <ResourceDictionary Source="Themes/Win11Controls.xaml"/>
+                <ResourceDictionary Source="Themes/SvgIcons.xaml"/>
+                <ResourceDictionary Source="Themes/BaseStyles.xaml"/>
+                <ResourceDictionary Source="Themes/ControlStyles.xaml"/>
+                <ResourceDictionary Source="Themes/ComboBoxStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="InvertedBoolToVisConverter" Invert="True" />
+            <converters:IntToRadioBoolConverter x:Key="IntToRadioBool" />
+            <converters:IntToVisibilityConverter x:Key="IntToVis" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
