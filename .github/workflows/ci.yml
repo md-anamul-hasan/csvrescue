@@ -15,6 +15,8 @@ jobs:
         with:
           components: rustfmt, clippy
 
+      - uses: Swatinem/rust-cache@v2
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -36,10 +38,17 @@ jobs:
       - name: Rust workspace tests
         run: cargo test --workspace --all-targets
 
-      - name: Dependency audit (cargo-deny)
-        uses: EmbarkStudios/cargo-deny-action@v2
+      - uses: taiki-e/install-action@v2
         with:
-          arguments: check
+          tool: cargo-audit,cargo-deny
+
+      - name: Security & license audit
+        shell: pwsh
+        run: |
+          cargo audit
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo deny check
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Build release binary
-        run: cargo build --release -p csvrescue-app --bin CSVRescue
+        run: cargo build --release -p csvrescue-app --bin CSVRescue --locked
