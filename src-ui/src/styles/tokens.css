@@ -1,0 +1,88 @@
+:root,
+[data-theme="dark"] {
+  --bg-canvas: #0e1116;
+  --bg-surface: #151a22;
+  --bg-elevated: #1c222d;
+  --bg-hover: #222936;
+  --bg-selected: #192b49;
+  --border-hairline: #262f3d;
+  --border-strong: #364357;
+
+  --text-primary: #f0f4f8;
+  --text-secondary: #9ba7b8;
+  --text-muted: #7b889c;
+  --text-inverse: #ffffff;
+
+  --accent: #1d6fe8;
+  --accent-hover: #3180f5;
+  --accent-subtle: rgba(29, 111, 232, 0.16);
+  --accent-border: rgba(29, 111, 232, 0.48);
+
+  --status-clean: #23a55a;
+  --status-clean-bg: rgba(35, 165, 90, 0.14);
+  --status-clean-text: #5cd68d;
+
+  --status-repaired: #1d6fe8;
+  --status-repaired-bg: rgba(29, 111, 232, 0.16);
+  --status-repaired-text: #72aaff;
+
+  --status-warning: #d98b14;
+  --status-warning-bg: rgba(217, 139, 20, 0.16);
+  --status-warning-text: #f5b942;
+
+  --status-danger: #e04f5f;
+  --status-danger-bg: rgba(224, 79, 95, 0.16);
+  --status-danger-text: #ff8593;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-drawer: -8px 0 28px rgba(0, 0, 0, 0.45);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --font-ui: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Mono', 'Cascadia Code', 'Consolas', monospace;
+  --sidebar-width: 224px;
+}
+
+[data-theme="light"] {
+  --bg-canvas: #f5f7fa;
+  --bg-surface: #ffffff;
+  --bg-elevated: #eef2f7;
+  --bg-hover: #e5ecf4;
+  --bg-selected: #e3edfc;
+  --border-hairline: #d6dee8;
+  --border-strong: #b4c0cf;
+
+  --text-primary: #11161f;
+  --text-secondary: #4b5668;
+  --text-muted: #5a677b;
+  --text-inverse: #ffffff;
+
+  --accent: #0f62d6;
+  --accent-hover: #0a52b8;
+  --accent-subtle: rgba(15, 98, 214, 0.1);
+  --accent-border: rgba(15, 98, 214, 0.38);
+
+  --status-clean: #167942;
+  --status-clean-bg: rgba(22, 121, 66, 0.1);
+  --status-clean-text: #116235;
+
+  --status-repaired: #0f62d6;
+  --status-repaired-bg: rgba(15, 98, 214, 0.1);
+  --status-repaired-text: #0b4fad;
+
+  --status-warning: #a66300;
+  --status-warning-bg: rgba(166, 99, 0, 0.11);
+  --status-warning-text: #7d4a00;
+
+  --status-danger: #c42b3b;
+  --status-danger-bg: rgba(196, 43, 59, 0.11);
+  --status-danger-text: #9e1f2c;
+
+  --shadow-sm: 0 1px 2px rgba(17, 22, 31, 0.06);
+  --shadow-md: 0 8px 24px rgba(17, 22, 31, 0.12);
+  --shadow-drawer: -8px 0 24px rgba(17, 22, 31, 0.14);
+}

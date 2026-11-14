@@ -12,25 +12,39 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      # Set the SIGNPATH_ORGANIZATION_ID repository variable and SIGNPATH_API_TOKEN secret once SignPath approves the project.
+      # Set SIGNPATH_ORGANIZATION_ID repo variable and SIGNPATH_API_TOKEN secret once SignPath approves the project.
       SIGN: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 10.0.x
 
-      - name: Test
-        run: dotnet test CSVRescue.slnx -c Release --nologo
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src-ui/package-lock.json
+
+      - name: Build UI & test Rust workspace
+        run: |
+          Push-Location src-ui
+          npm ci --no-audit --no-fund
+          npm run build
+          Pop-Location
+          cargo clippy --workspace --all-targets -- -D warnings
+          cargo test --workspace --all-targets
+        shell: pwsh
 
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
 
-      - name: Publish binaries
+      - name: Publish release binary to dist/stage
         run: ./scripts/build-installer.ps1 -PublishOnly
         shell: pwsh
 
-      # ---- sign the app's own binary before packaging
+      # ---- sign CSVRescue.exe before packaging installer & portable archive
       - name: Collect binaries to sign
         if: env.SIGN == 'true'
         shell: pwsh
@@ -93,11 +107,14 @@ jobs:
       - name: Package release files
         shell: pwsh
         run: |
-          $v = ([xml](Get-Content Directory.Build.props)).Project.PropertyGroup.Version
+          $cargoToml = Get-Content Cargo.toml -Raw
+          if (-not ($cargoToml -match '(?m)^version\s*=\s*"([^"]+)"')) { throw 'Version not found in Cargo.toml' }
+          $v = $Matches[1]
           New-Item -ItemType Directory -Force dist/release | Out-Null
           Copy-Item "dist/installer/CSVRescue-Setup-$v.exe" dist/release
+          Compress-Archive -Path dist/stage/* -DestinationPath "dist/release/CSVRescue-$v-win64-portable.zip" -CompressionLevel Optimal -Force
           # LF endings so `sha256sum -c` works on Linux and macOS too
-          $sums = Get-ChildItem dist/release -File | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" }
+          $sums = Get-ChildItem dist/release -File | Sort-Object Name | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" }
           [IO.File]::WriteAllText("$PWD/dist/release/SHA256SUMS.txt", ($sums -join "`n") + "`n")
 
       - uses: actions/upload-artifact@v4

@@ -1,0 +1,45 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: src-ui/package-lock.json
+
+      - name: Build UI (TypeScript + Vite)
+        working-directory: src-ui
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Rust formatting check
+        run: cargo fmt --all -- --check
+
+      - name: Rust Clippy (warnings denied)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Rust workspace tests
+        run: cargo test --workspace --all-targets
+
+      - name: Dependency audit (cargo-deny)
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          arguments: check
+
+      - name: Build release binary
+        run: cargo build --release -p csvrescue-app --bin CSVRescue

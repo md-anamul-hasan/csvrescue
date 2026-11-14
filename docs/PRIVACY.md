@@ -1,9 +1,11 @@
-# CSVRescue privacy policy
+# CSVRescue Privacy Policy
 
-_Last updated: 2026-10-22_
+_Last updated: 2026-11-14_
 
-CSVRescue runs entirely on your PC. It makes no network connections: no telemetry, no update check, nothing is uploaded. It reads the file you open and writes only the new file you save; it refuses to overwrite the original.
+CSVRescue v2.0.0 runs 100% locally on your Windows PC. It opens no network sockets, sends no telemetry, performs no crash uploads, and executes no background update checks.
 
-There is no account, no licence key, no analytics and no crash reporting. Logs stay on your machine in `%APPDATA%\CSVRescue`.
+- **Read-Only Inputs:** CSVRescue reads only the file you open and refuses overwriting the source file when exporting.
+- **Local State Only:** Preferences (`settings.json`), export history (`history.json`), and local error logs (`logs/csvrescue.log`, `error.log`) are stored strictly in `%APPDATA%\CSVRescue` and can be cleared at any time from the History panel or by deleting that folder.
+- **Restrictive Runtime CSP:** The bundled UI enforces `connect-src 'self' ipc:` with zero external scripts, fonts, or API origins.
 
-Questions: contact@mdanamulhasan.com
+Questions: `contact@mdanamulhasan.com`

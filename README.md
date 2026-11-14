@@ -1,88 +1,104 @@
-# CSVRescue — CSV Encoding, Delimiter and Excel Cleaner
+# CSVRescue — Native Rust CSV Diagnostic, Repair & Recovery Tool
 
-A Windows desktop tool (**.NET 10 / WPF**) that makes a CSV or text export readable again and saves it in a form Excel will not damage. It works out the encoding, the delimiter and the decimal mark, shows how the columns will look, keeps part numbers and leading zeros as text, and saves a clean CSV or Excel (.xlsx) file. The original file is never changed.
+A native **Rust + Tauri 2.x** desktop application for Windows 10/11 (x64) that diagnoses, recovers, validates, and safely exports malformed or damaged CSV and delimited text files without changing original source files or losing data to Excel auto-formatting.
 
-![CSVRescue main window, dark theme](docs/media/screenshot-dark.png)
+![CSVRescue workbench, dark theme](docs/media/screenshot-dark.png)
 
 <details><summary>Light theme</summary>
 
-![CSVRescue main window, light theme](docs/media/screenshot-light.png)
+![CSVRescue workbench, light theme](docs/media/screenshot-light.png)
 
 </details>
 
 ## Download
 
-Get the installer from the [latest release](https://github.com/md-anamul-hasan/csvrescue/releases/latest) (Windows 10/11, 64-bit; self-contained, no .NET install needed) and check it against `SHA256SUMS.txt`. Release builds are intended to be code-signed with a free certificate from the [SignPath Foundation](https://signpath.org/) (see [Code signing policy](#code-signing-policy)); until the project is approved, Windows SmartScreen may warn about an unknown publisher.
+Get the installer or portable ZIP from the [latest release](https://github.com/md-anamul-hasan/csvrescue/releases/latest) (Windows 10/11 64-bit; `5.39 MiB` native binary / `3.75 MiB` installer; zero `.NET` or Node.js runtime needed) and verify checksums against `SHA256SUMS.txt`. Release builds are intended to be code-signed through the [SignPath Foundation](https://signpath.org/) (see [Code signing policy](#code-signing-policy)); until signing approval is active, Windows SmartScreen may warn about an unknown publisher.
 
-## What it does
+## Capabilities
 
-| Area | Behaviour |
+| Area | Behavior |
 |---|---|
-| Encoding | Byte order mark (UTF-8, UTF-16, UTF-32), UTF-16 without one, valid UTF-8, otherwise Windows-1252; override with Windows-1250/1251/1253/1254/1257, ISO-8859-1/2, Shift-JIS, GBK, Big5, EUC-KR or IBM437 |
-| Delimiter and decimal mark | Detects comma, semicolon, tab or pipe, and decimal comma versus dot; every choice can be overridden |
-| Repairs mojibake | Text saved as UTF-8 twice (é shown as Ã©) is repaired when the repair is clean |
-| Text or number | A column is Number only when every value is a clean number; IDs, part numbers, leading zeros, 16+ digit numbers and date-like or 1E5-like values stay Text. Switch any column |
-| Saves safely | Excel (.xlsx) with Text cells, real numbers, bold frozen header and fitted widths; or CSV in UTF-8 (with or without BOM) with comma, semicolon or tab |
-| Reports problems | Rows with a different number of columns, empty lines, stray quotes and a missing closing quote |
-| Other | Opens files up to 300 MB; drag a file onto the window or run `CSVRescue.exe <file>`; dark/light/system theme |
+| **Encoding & Unicode** | Detects UTF-8 / UTF-16 LE & BE / UTF-32 LE & BE BOMs, BOM-less UTF-16 via zero-byte distribution, strict UTF-8, and Windows-1252 fallback; manual override across 20 encodings (`encoding_rs`) with explicit lossy character counts |
+| **Mojibake Repair** | Automatically detects and cleanly reverses double-encoded UTF-8 sequences (`Ã©` -> `é`, `â‚¬` -> `€`, `M8 Ã— 20` -> `M8 × 20`) when reversible byte-for-byte |
+| **Delimiter, Quote & Header** | Detects `,`, `;`, `\t`, `|` delimiters, doubled-quote vs. backslash escapes, CRLF/LF/CR line endings, header rows, and `Dot` vs. `Comma` decimal marks |
+| **Recovery Strategies** | Supports `Preserve` (keep source records verbatim with diagnostics) and `AlignColumns` (pad short rows and merge split fields only when numeric column profiles yield a unique alignment); flags multi-candidate rows as `Ambiguous` |
+| **Side-by-Side Inspection** | Inspect Original vs. Recovered rows per cell, filter by issue kind (`Problems`, `Repaired / Ragged`, `Excel Risk`, `Formula Risk`, `Manual Edits`, `Duplicates`), and override or revert individual cells |
+| **Excel & Formula Protection** | Keeps leading zeros (`00123`, `-0042`), 16+ digit numbers, `1E5` codes, and dates (`01-02`, `1/2`) as `Text`; flags formula triggers (`=`, `+`, `-`, `@`, `\t`, `\r`) and offers opt-in idempotent `'` sanitization |
+| **Safe Atomic Export** | Writes pure-Rust OpenXML `.xlsx` (explicit `@` text format `numFmtId="49"`, native numeric cells, bold frozen header, XML control-char stripping, up to 1,048,576 rows) and clean CSV, Markdown/JSON recovery reports, and dry-run previews; blocks overwriting the open source file |
+| **Performance & Scale** | Handles files up to **300 MiB** locally (`~800 ms` total load + CSV + XLSX export on 200k European rows, `~192 MB` working set); drag-and-drop onto window or run `CSVRescue.exe <file>` |
 
-### Command line
-
-```
-CSVRescue.exe <file>
-```
-Opens the file at once (also works with *Open with* and drag-and-drop onto the exe).
-
-Full walkthrough: [docs/USER_GUIDE.md](docs/USER_GUIDE.md).
-
-
-## Build, test, run
+### Command Line
 
 ```powershell
-dotnet build CSVRescue.slnx
-dotnet test  CSVRescue.slnx
+CSVRescue.exe <path-to-file.csv>
+```
 
-# Self-contained installer in dist\installer (needs Inno Setup 6: winget install JRSoftware.InnoSetup)
-.\scripts\build-installer.ps1
+Opens the file immediately on launch (also works with Windows Explorer *Open with*).
 
-# Installer plus SHA256SUMS.txt in dist\release, ready to upload
+Walkthrough & details: [docs/USER_GUIDE.md](docs/USER_GUIDE.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and [docs/SECURITY_AUDIT.md](docs/SECURITY_AUDIT.md).
+
+## Build, Test & Package
+
+Prerequisites: stable Rust toolchain (with `rustfmt` and `clippy`), Node.js 22+ (build-time only for `src-ui`), and [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`) for packaging.
+
+```powershell
+# 1. Build frontend presentation assets
+Push-Location src-ui
+npm ci
+npm run build
+Pop-Location
+
+# 2. Verify formatting, lints, and Rust test suite
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace --all-targets
+
+# 3. Supply-chain & vulnerability audit (optional local tools: cargo-audit, cargo-deny)
+cargo deny check
+cargo audit
+
+# 4. Run 200,000-row benchmark
+cargo run --release -p csvrescue-core --example bench
+
+# 5. Build installer, portable ZIP, and SHA256SUMS.txt into dist\release\
 .\scripts\package-release.ps1
 ```
 
-The version comes from `Directory.Build.props`. Building needs the .NET 10 SDK; the installed app needs nothing else.
+The single source of product version is [Cargo.toml](Cargo.toml) (`[workspace.package] version`) paired with [crates/csvrescue-app/tauri.conf.json](crates/csvrescue-app/tauri.conf.json).
 
-## Layout
+## Repository Layout
 
+```text
+crates/
+├── csvrescue-core/    Pure-Rust parsing, encoding, recovery, validation & CSV/XLSX engine + tests & bench
+└── csvrescue-app/     Tauri 2.x Windows desktop shell, capabilities, CSP & IPC commands
+src-ui/                TypeScript + React 19 UI (compiled by Vite into embedded static assets)
+docs/                  Architecture, Security Audit, Migration Inventory, Benchmarks & User Guide
+installer/             Inno Setup 6 script (csvrescue.iss)
+scripts/               Release packaging scripts (build-installer.ps1, package-release.ps1)
+deny.toml              cargo-deny license, source & advisory policy
 ```
-Services/          encoding/delimiter detection, CSV reader, xlsx/CSV writers, themes
-ViewModels/        MVVM: MainViewModel, ShellViewModel
-Controls/          title bar, status bar
-Themes/            design tokens (dark/light), controls, icons
-CSVRescue.Tests/   xUnit: detection, parsing, repair, writers
-scripts/           build-installer.ps1, package-release.ps1, capture-media.ps1 (screenshots)
-Directory.Build.props  single source of the product version
-```
 
-## Known limitations
+## Limitations
 
-- A plain CSV cannot carry the information that a value is text; use the .xlsx output when it matters.
-- At most 1,048,576 rows in an .xlsx file.
-- Windows 10 (21H2+) and Windows 11, 64-bit only.
+- Plain `.csv` files have no standard type metadata; export to `.xlsx` whenever preserving leading zeros or long numeric IDs in Excel matters.
+- Excel `.xlsx` worksheets enforce OpenXML limits (`1,048,576` rows, `16,384` columns, `32,767` characters per cell).
+- Windows 10 (21H2+) and Windows 11 64-bit only (requires Windows WebView2 Runtime).
 
 ## License
 
-[MIT](LICENSE). Free for personal and commercial use.
+[MIT](LICENSE). Free for personal and commercial use. Third-party notices live in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-## Code signing policy
+## Code Signing Policy
 
-Free code signing for release builds is provided by [SignPath.io](https://about.signpath.io/), with a certificate from the [SignPath Foundation](https://signpath.org/), once the project is approved.
+Free code signing for release builds is provided by [SignPath.io](https://about.signpath.io/), with a certificate from the [SignPath Foundation](https://signpath.org/), once approved.
 
-- Releases are built and signed only by the GitHub Actions workflow `.github/workflows/release.yml` from tagged commits of this repository.
-- Only CSVRescue's own binary and its installer are signed.
+- Official releases are built and signed only by [release.yml](.github/workflows/release.yml) from tagged repository commits.
+- Only CSVRescue's own executable (`CSVRescue.exe`) and Inno Setup installer (`CSVRescue-Setup-*.exe`) are signed; runtime dependencies stay unmodified.
 - Maintainer and approver: Md Anamul Hasan ([@md-anamul-hasan](https://github.com/md-anamul-hasan)).
 
 ## Privacy
 
 Full policy: [docs/PRIVACY.md](docs/PRIVACY.md).
 
-CSVRescue makes no network connections and has no telemetry or update check. It reads the file you open and writes only the file you save.
+CSVRescue makes zero network connections, collects no telemetry, and never modifies your original CSV files.

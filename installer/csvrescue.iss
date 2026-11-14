@@ -1,8 +1,8 @@
-; CSVRescue installer. Build with scripts\build-installer.ps1 (publishes a self-contained build to dist\stage first).
+; CSVRescue installer. Build with scripts\build-installer.ps1 (stages native Rust + Tauri build in dist\stage first).
 #define AppName "CSVRescue"
 #define AppFullName "CSVRescue - CSV Encoding, Delimiter and Excel Cleaner"
 #ifndef AppVersion
-  #define AppVersion "1.1.0"
+  #define AppVersion "2.0.0"
 #endif
 #define StageDir "..\dist\stage"
 
@@ -18,7 +18,7 @@ DefaultGroupName=CSVRescue
 DisableProgramGroupPage=yes
 UninstallDisplayIcon={app}\CSVRescue.exe
 UninstallDisplayName={#AppFullName}
-SetupIconFile=..\Assets/icon.ico
+SetupIconFile=..\Assets\icon.ico
 LicenseFile=..\LICENSE
 OutputDir=..\dist\installer
 OutputBaseFilename=CSVRescue-Setup-{#AppVersion}

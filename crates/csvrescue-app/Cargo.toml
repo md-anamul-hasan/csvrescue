@@ -1,0 +1,30 @@
+[package]
+name = "csvrescue-app"
+description = "CSVRescue — Privacy-first, deterministic CSV repair and recovery desktop app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+default-run = "CSVRescue"
+
+[[bin]]
+name = "CSVRescue"
+path = "src/main.rs"
+
+[dependencies]
+csvrescue-core = { path = "../csvrescue-core" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+windows-sys = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_System_LibraryLoader",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }

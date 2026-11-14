@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T15:46:00Z",
+  "title": "Design System: CSVRescue",
+  "tokens": {
+    "colors": {
+      "windows-cobalt": "#1d6fe8",
+      "windows-cobalt-hover": "#3180f5",
+      "obsidian-canvas": "#0e1116",
+      "slate-surface": "#151a22",
+      "elevated-slate": "#1c222d",
+      "hairline-border": "#262f3d",
+      "strong-border": "#364357",
+      "primary-ink": "#f0f4f8",
+      "secondary-ink": "#9ba7b8",
+      "status-clean": "#23a55a",
+      "status-warning": "#d98b14",
+      "status-danger": "#e04f5f"
+    },
+    "typography": {
+      "headline": {
+        "fontFamily": "Segoe UI Variable Text, Segoe UI, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 600,
+        "lineHeight": 1.45,
+        "letterSpacing": "-0.01em"
+      },
+      "title": {
+        "fontFamily": "Segoe UI Variable Text, Segoe UI, system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 600,
+        "lineHeight": 1.45
+      },
+      "body": {
+        "fontFamily": "Segoe UI Variable Text, Segoe UI, system-ui, sans-serif",
+        "fontSize": "13px",
+        "fontWeight": 400,
+        "lineHeight": 1.45
+      },
+      "label": {
+        "fontFamily": "Segoe UI Variable Text, Segoe UI, system-ui, sans-serif",
+        "fontSize": "11px",
+        "fontWeight": 600,
+        "lineHeight": 1.45
+      },
+      "mono": {
+        "fontFamily": "Cascadia Mono, Cascadia Code, Consolas, monospace",
+        "fontSize": "12.5px",
+        "fontWeight": 400,
+        "lineHeight": 1.45,
+        "fontFeature": "tnum"
+      }
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px"
+    },
+    "spacing": {
+      "xs": "6px",
+      "sm": "10px",
+      "md": "14px",
+      "lg": "20px"
+    },
+    "components": {
+      "button-primary": {
+        "backgroundColor": "#1d6fe8",
+        "textColor": "#ffffff",
+        "rounded": "6px",
+        "padding": "6px 12px"
+      },
+      "button-primary-hover": {
+        "backgroundColor": "#3180f5"
+      },
+      "button-secondary": {
+        "backgroundColor": "#1c222d",
+        "textColor": "#f0f4f8",
+        "rounded": "6px",
+        "padding": "6px 12px"
+      },
+      "input-field": {
+        "backgroundColor": "#0e1116",
+        "textColor": "#f0f4f8",
+        "rounded": "6px",
+        "height": "30px"
+      },
+      "surface-panel": {
+        "backgroundColor": "#151a22",
+        "textColor": "#f0f4f8",
+        "rounded": "8px",
+        "padding": "14px 16px"
+      }
+    }
+  },
+  "extensions": {
+    "colorMeta": {
+      "light": {
+        "obsidian-canvas": "#f5f7fa",
+        "slate-surface": "#ffffff",
+        "elevated-slate": "#eef2f7",
+        "hairline-border": "#d6dee8",
+        "strong-border": "#b5c2d1",
+        "primary-ink": "#11161f",
+        "secondary-ink": "#4b5668",
+        "windows-cobalt": "#0f62d6"
+      },
+      "semantic": {
+        "clean": "#23a55a",
+        "repaired": "#1d6fe8",
+        "warning": "#d98b14",
+        "danger": "#e04f5f"
+      }
+    },
+    "typographyMeta": {
+      "minFunctionalFontSize": "11px",
+      "tabularNumericEnforcement": true
+    },
+    "shadows": {
+      "rest": "none (1px hairline border)",
+      "overlay": "0 6px 20px rgba(0, 0, 0, 0.45)"
+    },
+    "motion": {
+      "duration": "120ms",
+      "easing": "cubic-bezier(0.2, 0, 0, 1)",
+      "reducedMotionSupport": true
+    },
+    "breakpoints": {
+      "compact": "820px"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\"><path d=\"M8 2v8M5 7l3 3 3-3M2 12v2h12v-2\"/></svg>Save Safe .xlsx</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:6px;background:#1d6fe8;color:#fff;border:1px solid transparent;border-radius:6px;padding:6px 12px;font:600 13px/1.45 'Segoe UI Variable Text',system-ui,sans-serif;cursor:pointer}.ds-btn-primary:hover{background:#3180f5}"
+    },
+    {
+      "name": "Secondary Button",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">Export CSV</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;gap:6px;background:#1c222d;color:#f0f4f8;border:1px solid #364357;border-radius:6px;padding:6px 12px;font:600 13px/1.45 'Segoe UI Variable Text',system-ui,sans-serif;cursor:pointer}"
+    },
+    {
+      "name": "Search Input",
+      "html": "<input class=\"ds-input\" type=\"search\" placeholder=\"Filter cells, lines, or values...\" aria-label=\"Search cells\" />",
+      "css": ".ds-input{height:30px;padding:0 10px;background:#0e1116;color:#f0f4f8;border:1px solid #364357;border-radius:6px;font:400 13px/1.45 'Segoe UI Variable Text',system-ui,sans-serif}.ds-input::placeholder{color:#9ba7b8;opacity:1}"
+    },
+    {
+      "name": "Column Type Pill",
+      "html": "<button class=\"ds-kind-pill\" type=\"button\" title=\"Protected as Text\">TEXT</button>",
+      "css": ".ds-kind-pill{display:inline-flex;align-items:center;background:rgba(217,139,20,.14);color:#f3b54a;border:1px solid rgba(217,139,20,.45);border-radius:4px;padding:2px 6px;font:600 11px/1.2 'Segoe UI Variable Text',system-ui,sans-serif}"
+    },
+    {
+      "name": "Cell Status Badge",
+      "html": "<span class=\"ds-cell-badge\">FORMULA</span>",
+      "css": ".ds-cell-badge{display:inline-flex;align-items:center;background:rgba(224,79,95,.16);color:#ff8f9b;border:1px solid rgba(224,79,95,.45);border-radius:4px;padding:2px 6px;font:600 11px/1.2 'Cascadia Mono',monospace}"
+    },
+    {
+      "name": "RescueGauge",
+      "html": "<div class=\"ds-gauge\" role=\"region\" aria-label=\"Dataset health bar\"><div class=\"ds-seg-clean\" style=\"width:72%\"></div><div class=\"ds-seg-repaired\" style=\"width:12%\"></div><div class=\"ds-seg-warn\" style=\"width:11%\"></div><div class=\"ds-seg-danger\" style=\"width:5%\"></div></div>",
+      "css": ".ds-gauge{display:flex;height:8px;width:100%;border-radius:4px;overflow:hidden;background:#0e1116;border:1px solid #262f3d}.ds-seg-clean{background:#23a55a}.ds-seg-repaired{background:#1d6fe8}.ds-seg-warn{background:#d98b14}.ds-seg-danger{background:#e04f5f}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Precision Diagnostic Instrument",
+    "overview": "CSVRescue follows native Windows 11 desktop tooling idioms—high-density Fluent 2 hairlines, restrained obsidian slate and porcelain light surfaces, monospace tabular numerics, and unambiguous semantic status signals.",
+    "keyCharacteristics": [
+      "Monospaced tabular typography (Cascadia Mono with tabular-nums) for all spreadsheet cell values, byte counts, and row indices.",
+      "Dual-theme system (dark, light, system) meeting WCAG 2.2 AA contrast on every interactive label, placeholder (>= 4.5:1), and status pill.",
+      "Direct manipulation: clickable TEXT/NUMBER column pills, column width drag resizing, live dry-run preview before saving, and side-by-side row diffing."
+    ],
+    "rules": [
+      {
+        "name": "The Diagnostic Signal Rule",
+        "description": "Clean green (#23a55a), repaired blue (#1d6fe8), Excel-risk amber (#d98b14), and formula-hazard crimson (#e04f5f) appear only inside RescueGauge, cell status badges, column type pills, and validation findings—never as decorative chrome."
+      }
+    ],
+    "dos": [
+      "Enforce the 11px minimum font size across every interactive pill, badge, and functional label.",
+      "Render spreadsheet cell data and row counts in monospace tabular-nums.",
+      "Validate placeholder contrast against dark canvas (>= 4.5:1)."
+    ],
+    "donts": [
+      "Add 3px colored left stripes (border-left-width: 3px) on cards or rows—use uniform 1px borders or subtle semantic badges.",
+      "Add marketing eyebrow labels, decorative glass blur, or animations that ignore prefers-reduced-motion."
+    ]
+  }
+}
