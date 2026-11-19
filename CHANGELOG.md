@@ -2,6 +2,11 @@
 
 All notable changes to CSVRescue follow [Semantic Versioning](https://semver.org/). The workspace version is defined in `Cargo.toml` and `crates/csvrescue-app/tauri.conf.json`.
 
+## [2.1.1] - 2026-11-19
+
+### Changed
+- New look: Technical Glassmorphism v1.0, the design system of mdanamulhasan.com. Slate canvas, Precision Cobalt accent with PLM teal highlights in dark mode, hairline borders, crisp 6/10/14 px corners, restrained shadows.
+
 ## [2.1.0] - 2026-11-19
 
 ### Changed
