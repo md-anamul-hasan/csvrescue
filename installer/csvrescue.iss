@@ -2,7 +2,7 @@
 #define AppName "CSVRescue"
 #define AppFullName "CSVRescue - CSV Encoding, Delimiter and Excel Cleaner"
 #ifndef AppVersion
-  #define AppVersion "2.0.0"
+  #define AppVersion "2.1.0"
 #endif
 #define StageDir "..\dist\stage"
 
